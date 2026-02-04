@@ -4,14 +4,33 @@ import { useAuthStore } from '@/stores/auth'
 const routes = [
   {
     path: '/login',
-    name: 'login',
-    component: () => import('@/views/auth/Login.vue')
+    component: () => import('@/views/auth/Login.vue'),
+    meta: { layout: 'auth' }
   },
   {
     path: '/',
-    name: 'home',
     component: () => import('@/views/Home.vue'),
-    meta: { auth: true }
+    meta: { auth: true, layout: 'default', title: 'Dashboard' }
+  },
+  {
+    path: '/suppliers',
+    component: () => import('@/views/suppliers/Index.vue'),
+    meta: { auth: true, layout: 'default', title: 'Fornecedores' }
+  },
+  {
+    path: '/products',
+    component: () => import('@/views/products/Index.vue'),
+    meta: { auth: true, layout: 'default', title: 'Produtos' }
+  },
+  {
+    path: '/orders',
+    component: () => import('@/views/orders/Index.vue'),
+    meta: { auth: true, layout: 'default', title: 'Pedidos' }
+  },
+  {
+    path: '/reports',
+    component: () => import('@/views/reports/Index.vue'),
+    meta: { auth: true, layout: 'default', title: 'Relatórios' }
   }
 ]
 
@@ -24,11 +43,7 @@ router.beforeEach((to) => {
   const auth = useAuthStore()
 
   if (to.meta.auth && !auth.isAuthenticated) {
-    return { name: 'login' }
-  }
-
-  if (to.name === 'login' && auth.isAuthenticated) {
-    return { name: 'home' }
+    return '/login'
   }
 })
 

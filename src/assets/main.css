@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@plugin "daisyui";
+.menu a {
+  @apply rounded-lg px-3 py-2 transition-all duration-200 ease-in-out;
+}
+.menu a:hover {
+  @apply bg-base-200;
+}
+.menu a.active {
+  @apply bg-base-300 font-semibold;
+}
+.menu a:hover {
+  transform: translateX(4px);
+}
