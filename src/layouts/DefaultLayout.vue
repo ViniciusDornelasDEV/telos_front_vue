@@ -2,6 +2,7 @@
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 import { usePage } from '@/composables/usePage'
+
 const auth = useAuthStore()
 const router = useRouter()
 const { title, breadcrumbs } = usePage()
@@ -10,7 +11,6 @@ function logout() {
   auth.logout()
   router.push('/login')
 }
-
 </script>
 
 <template>
@@ -20,9 +20,9 @@ function logout() {
 
     <!-- CONTEÚDO PRINCIPAL -->
     <div class="drawer-content flex flex-col">
-      <!-- Topbar -->
-      <header class="navbar bg-base-100 shadow px-6">
-        <!-- Mobile menu button -->
+      <!-- Header -->
+      <header class="navbar bg-base-100 shadow-sm px-6">
+        <!-- Mobile menu -->
         <div class="flex-none lg:hidden">
           <label for="main-drawer" class="btn btn-square btn-ghost">
             ☰
@@ -30,23 +30,31 @@ function logout() {
         </div>
 
         <!-- Title + breadcrumb -->
-        <div class="flex-1 flex flex-col">
-          <h1 class="text-lg font-semibold">
+        <div class="flex-1 flex flex-col gap-1">
+          <h1 class="text-lg font-semibold leading-tight">
             {{ title }}
           </h1>
 
-          <div class="text-sm breadcrumbs">
+          <nav class="text-sm breadcrumbs">
             <ul>
               <li
                 v-for="(item, index) in breadcrumbs"
                 :key="index"
               >
-                <RouterLink :to="item.to">
+                <RouterLink
+                  v-if="item.to"
+                  :to="item.to"
+                  class="hover:underline"
+                >
                   {{ item.label }}
                 </RouterLink>
+
+                <span v-else class="text-base-content/70">
+                  {{ item.label }}
+                </span>
               </li>
             </ul>
-          </div>
+          </nav>
         </div>
 
         <!-- Actions -->
@@ -55,27 +63,28 @@ function logout() {
         </button>
       </header>
 
-
       <!-- Conteúdo -->
       <main class="p-6 flex-1 overflow-y-auto">
         <router-view />
       </main>
     </div>
 
-    <!-- SIDEBAR / DRAWER -->
+    <!-- SIDEBAR -->
     <div class="drawer-side">
       <label for="main-drawer" class="drawer-overlay"></label>
 
       <aside class="w-64 bg-base-100 shadow-xl">
+        <!-- Logo -->
         <div class="p-4 text-xl font-bold border-b">
           TelosCRM
         </div>
 
-        <ul class="menu px-4">
+        <!-- Menu -->
+        <ul class="menu px-4 py-4 gap-1">
           <li>
             <RouterLink
               to="/"
-              class="rounded-lg"
+              class="rounded-lg transition-colors"
               active-class="active"
               exact-active-class="active"
             >
@@ -84,25 +93,41 @@ function logout() {
           </li>
 
           <li>
-            <RouterLink to="/suppliers" class="rounded-lg" active-class="active">
+            <RouterLink
+              to="/suppliers"
+              class="rounded-lg transition-colors"
+              active-class="active"
+            >
               Fornecedores
             </RouterLink>
           </li>
 
           <li>
-            <RouterLink to="/products" class="rounded-lg" active-class="active">
+            <RouterLink
+              to="/products"
+              class="rounded-lg transition-colors"
+              active-class="active"
+            >
               Produtos
             </RouterLink>
           </li>
 
           <li>
-            <RouterLink to="/orders" class="rounded-lg" active-class="active">
+            <RouterLink
+              to="/orders"
+              class="rounded-lg transition-colors"
+              active-class="active"
+            >
               Pedidos
             </RouterLink>
           </li>
 
           <li>
-            <RouterLink to="/reports" class="rounded-lg" active-class="active">
+            <RouterLink
+              to="/reports"
+              class="rounded-lg transition-colors"
+              active-class="active"
+            >
               Relatórios
             </RouterLink>
           </li>
@@ -111,4 +136,3 @@ function logout() {
     </div>
   </div>
 </template>
-

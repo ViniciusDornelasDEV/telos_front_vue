@@ -1,8 +1,73 @@
+<script setup>
+import { onMounted } from 'vue'
+import { useSuppliersStore } from '@/stores/suppliers'
+import DataTable from '@/components/DataTable.vue'
+import { Pencil, Trash2 } from 'lucide-vue-next'
+import { useRouter } from 'vue-router'
+
+const suppliersStore = useSuppliersStore()
+const router = useRouter()
+
+// Colunas da tabela
+const columns = [
+  { label: 'Nome', key: 'name' },
+  { label: 'CNPJ', key: 'cnpj' },
+  { label: 'Status', key: 'status' }
+]
+
+// Carregar fornecedores ao montar
+onMounted(() => {
+  suppliersStore.fetchSuppliers()
+})
+
+// Navegar para edição
+function editSupplier(id) {
+  router.push(`/suppliers/${id}/edit`)
+}
+
+// Excluir fornecedor
+function removeSupplier(id) {
+  if (confirm('Tem certeza que deseja excluir este fornecedor?')) {
+    suppliersStore.remove(id)
+  }
+}
+</script>
+
 <template>
-  <div class="card bg-base-100 shadow">
-    <div class="card-body">
-      <h2 class="card-title">Fornecedores</h2>
-      <p>Lista de fornecedores será exibida aqui.</p>
+  <div class="space-y-6">
+    <div class="flex justify-between items-center">
+      <h2 class="text-xl font-semibold">Fornecedores</h2>
+      <RouterLink to="/suppliers/create" class="btn btn-primary">
+        Novo Fornecedor
+      </RouterLink>
     </div>
+
+    <DataTable
+      :columns="columns"
+      :rows="suppliersStore.items"
+      :loading="suppliersStore.loading"
+      :per-page="5"
+    >
+      <template #actions="{ row }">
+        <div class="flex justify-end gap-2">
+          <!-- Editar -->
+          <div class="tooltip" data-tip="Editar">
+            <button class="btn btn-xs btn-ghost" @click="editSupplier(row.id)">
+              <Pencil class="w-4 h-4" />
+            </button>
+          </div>
+
+          <!-- Excluir -->
+          <div class="tooltip" data-tip="Excluir">
+            <button
+              class="btn btn-xs btn-ghost text-error"
+              @click="removeSupplier(row.id)"
+            >
+              <Trash2 class="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </template>
+    </DataTable>
   </div>
 </template>
