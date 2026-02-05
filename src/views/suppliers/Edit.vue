@@ -17,7 +17,6 @@ const form = reactive({ ...supplier })
 const loadingCep = ref(false)
 const cnpjError = ref('')
 
-// Função para buscar endereço pelo CEP
 async function handleCepBlur() {
   try {
     loadingCep.value = true
@@ -38,7 +37,6 @@ async function handleCepBlur() {
   }
 }
 
-// Validação do CNPJ
 function handleCnpjBlur() {
   if (!validateCnpj(form.cnpj)) {
     cnpjError.value = 'CNPJ inválido'
@@ -47,7 +45,6 @@ function handleCnpjBlur() {
   }
 }
 
-// Submit do formulário
 function submit() {
   if (!validateCnpj(form.cnpj)) {
     cnpjError.value = 'CNPJ inválido'

@@ -94,6 +94,16 @@ function logout() {
 
           <li>
             <RouterLink
+              to="/users"
+              class="rounded-lg transition-colors"
+              active-class="active"
+            >
+              Usuários
+            </RouterLink>
+          </li>
+
+          <li>
+            <RouterLink
               to="/suppliers"
               class="rounded-lg transition-colors"
               active-class="active"

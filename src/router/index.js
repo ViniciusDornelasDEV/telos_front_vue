@@ -57,6 +57,54 @@ const routes = [
     }
   },
 
+
+
+
+
+  {
+    path: '/users',
+    name: 'users.index',
+    component: () => import('@/views/users/Index.vue'),
+    meta: {
+      auth: true,
+      layout: 'default',
+      title: 'Usuários',
+      breadcrumb: [
+        { label: 'Home', to: '/' }
+      ]
+    }
+  },
+
+  {
+    path: '/users/create',
+    name: 'users.create',
+    component: () => import('@/views/users/Create.vue'),
+    meta: {
+      auth: true,
+      layout: 'default',
+      title: 'Novo Usuário',
+      breadcrumb: [
+        { label: 'Home', to: '/' },
+        { label: 'Usuários', to: '/users' }
+      ]
+    }
+  },
+
+  {
+    path: '/users/:id/edit',
+    name: 'users.edit',
+    component: () => import('@/views/users/Edit.vue'),
+    meta: {
+      auth: true,
+      layout: 'default',
+      title: 'Editar Usuário',
+      breadcrumb: [
+        { label: 'Home', to: '/' },
+        { label: 'Usuários', to: '/users' }
+      ]
+    }
+  },
+  
   {
     path: '/products',
     component: () => import('@/views/products/Index.vue'),

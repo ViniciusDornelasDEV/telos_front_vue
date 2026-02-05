@@ -60,64 +60,36 @@ function submit() {
     </h2>
 
     <form class="space-y-4" @submit.prevent="submit">
-        <input
-        v-model="form.name"
-        class="input input-bordered w-full"
-        placeholder="Nome"
-        required
-        />
+      <input v-model="form.name" class="input input-bordered w-full" placeholder="Nome" required />
 
-        <input
-        v-model="form.cnpj"
-        class="input input-bordered w-full"
-        placeholder="CNPJ"
-        @blur="handleCnpjBlur"
-        v-mask="'99.999.999/9999-99'"
-        required
-        />
-        <div v-if="cnpjError" class="text-red-500 text-sm">{{ cnpjError }}</div>
+      <input v-model="form.cnpj" class="input input-bordered w-full" placeholder="CNPJ" @blur="handleCnpjBlur"
+        v-mask="'99.999.999/9999-99'" required />
+      <div v-if="cnpjError" class="text-red-500 text-sm">{{ cnpjError }}</div>
 
-        <input
-        v-model="form.cep"
-        class="input input-bordered w-full"
-        placeholder="CEP"
-        @blur="handleCepBlur"
-        v-mask="'99999-999'"
-        required
-        />
+      <input v-model="form.cep" class="input input-bordered w-full" placeholder="CEP" @blur="handleCepBlur"
+        v-mask="'99999-999'" required />
 
-        <input
-        v-model="form.address"
-        class="input input-bordered w-full"
-        placeholder="Endereço"
-        :disabled="loadingCep"
-        required
-        />
+      <input v-model="form.address" class="input input-bordered w-full" placeholder="Endereço" :disabled="loadingCep"
+        required />
 
-        <div v-if="loadingCep" class="text-sm text-base-content/60">
-            Buscando endereço...
-        </div>
+      <div v-if="loadingCep" class="text-sm text-base-content/60">
+        Buscando endereço...
+      </div>
 
-        <select
-        v-model="form.status"
-        class="select select-bordered w-full"
-        >
+      <select v-model="form.status" class="select select-bordered w-full">
         <option value="active">Ativo</option>
         <option value="inactive">Inativo</option>
-        </select>
+      </select>
 
-        <div class="flex gap-2">
+      <div class="flex gap-2">
         <button class="btn btn-primary" type="submit">
-            Salvar
+          Salvar
         </button>
 
-        <RouterLink
-            to="/suppliers"
-            class="btn btn-ghost"
-        >
-            Cancelar
+        <RouterLink to="/suppliers" class="btn btn-ghost">
+          Cancelar
         </RouterLink>
-        </div>
+      </div>
     </form>
   </div>
 </template>

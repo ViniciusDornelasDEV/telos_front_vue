@@ -8,24 +8,20 @@ import { useRouter } from 'vue-router'
 const suppliersStore = useSuppliersStore()
 const router = useRouter()
 
-// Colunas da tabela
 const columns = [
   { label: 'Nome', key: 'name' },
   { label: 'CNPJ', key: 'cnpj' },
   { label: 'Status', key: 'status' }
 ]
 
-// Carregar fornecedores ao montar
 onMounted(() => {
   suppliersStore.fetchSuppliers()
 })
 
-// Navegar para edição
 function editSupplier(id) {
   router.push(`/suppliers/${id}/edit`)
 }
 
-// Excluir fornecedor
 function removeSupplier(id) {
   if (confirm('Tem certeza que deseja excluir este fornecedor?')) {
     suppliersStore.remove(id)
