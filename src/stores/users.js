@@ -12,7 +12,9 @@ export const useUsersStore = defineStore('users', {
       this.items = []
       await new Promise(resolve => setTimeout(resolve, 500))
       this.items = [
-        { id: 1, name: 'Admin', email: 'admin@teste.com', status: 'active', type: 'admin' }
+        { id: 1, name: 'Admin', email: 'admin@teste.com', status: 'active', type: 'admin' },
+        { id: 2, name: 'João Vendedor', email: 'joao@teste.com', status: 'active', type: 'vendedor' },
+        { id: 3, name: 'Maria Vendedora', email: 'maria@teste.com', status: 'inactive', type: 'vendedor' }
       ]
       this.loading = false
     },

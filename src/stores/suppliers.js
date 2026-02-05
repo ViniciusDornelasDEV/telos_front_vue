@@ -19,7 +19,8 @@ export const useSuppliersStore = defineStore('suppliers', {
             cnpj: '76.060.377/0001-06',
             cep: '01001-000',
             address: 'Praça da Sé - São Paulo/SP',
-            status: 'active'
+            status: 'active',
+            sellers: [2, 3]
         }
         ]
 

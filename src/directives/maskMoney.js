@@ -1,4 +1,3 @@
-// src/directives/maskMoney.js
 export default {
   beforeMount(el, binding, vnode) {
     let lastValue = ''
@@ -10,7 +9,6 @@ export default {
       let integerPart = n.slice(0, -2)
       let decimalPart = n.slice(-2)
 
-      // Formata milhar
       integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 
       return `R$ ${integerPart},${decimalPart}`
