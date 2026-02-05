@@ -137,14 +137,23 @@ const routes = [
     }
   },
   {
+    path: '/products/upload',
+    name: 'products.upload',
+    component: () => import('@/views/products/Upload.vue'),
+    meta: {
+      auth: true,
+      layout: 'default',
+      title: 'Upload CSV de Produtos',
+      breadcrumb: [
+        { label: 'Home', to: '/' },
+        { label: 'Produtos', to: '/products' }
+      ]
+    }
+  },
+  {
     path: '/orders',
     component: () => import('@/views/orders/Index.vue'),
     meta: { auth: true, layout: 'default', title: 'Pedidos' }
-  },
-  {
-    path: '/reports',
-    component: () => import('@/views/reports/Index.vue'),
-    meta: { auth: true, layout: 'default', title: 'Relatórios' }
   }
 ]
 

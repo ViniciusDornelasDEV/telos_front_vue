@@ -42,6 +42,17 @@ export const useProductsStore = defineStore('products', {
 
     remove(id) {
       this.items = this.items.filter(p => p.id !== id)
+    },
+
+    async uploadCsv(formData) {
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        return { success: true, message: 'Upload simulado com sucesso!' }
+      } catch (error) {
+        console.error(error)
+        throw error
+      }
     }
+
   }
 })

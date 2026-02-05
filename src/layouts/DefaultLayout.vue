@@ -37,15 +37,8 @@ function logout() {
 
           <nav class="text-sm breadcrumbs">
             <ul>
-              <li
-                v-for="(item, index) in breadcrumbs"
-                :key="index"
-              >
-                <RouterLink
-                  v-if="item.to"
-                  :to="item.to"
-                  class="hover:underline"
-                >
+              <li v-for="(item, index) in breadcrumbs" :key="index">
+                <RouterLink v-if="item.to" :to="item.to" class="hover:underline">
                   {{ item.label }}
                 </RouterLink>
 
@@ -82,63 +75,32 @@ function logout() {
         <!-- Menu -->
         <ul class="menu px-4 py-4 gap-1">
           <li>
-            <RouterLink
-              to="/"
-              class="rounded-lg transition-colors"
-              active-class="active"
-              exact-active-class="active"
-            >
+            <RouterLink to="/" class="rounded-lg transition-colors" active-class="active" exact-active-class="active">
               Dashboard
             </RouterLink>
           </li>
 
           <li>
-            <RouterLink
-              to="/users"
-              class="rounded-lg transition-colors"
-              active-class="active"
-            >
+            <RouterLink to="/users" class="rounded-lg transition-colors" active-class="active">
               Usuários
             </RouterLink>
           </li>
 
           <li>
-            <RouterLink
-              to="/suppliers"
-              class="rounded-lg transition-colors"
-              active-class="active"
-            >
+            <RouterLink to="/suppliers" class="rounded-lg transition-colors" active-class="active">
               Fornecedores
             </RouterLink>
           </li>
 
           <li>
-            <RouterLink
-              to="/products"
-              class="rounded-lg transition-colors"
-              active-class="active"
-            >
+            <RouterLink to="/products" class="rounded-lg transition-colors" active-class="active">
               Produtos
             </RouterLink>
           </li>
 
           <li>
-            <RouterLink
-              to="/orders"
-              class="rounded-lg transition-colors"
-              active-class="active"
-            >
+            <RouterLink to="/orders" class="rounded-lg transition-colors" active-class="active">
               Pedidos
-            </RouterLink>
-          </li>
-
-          <li>
-            <RouterLink
-              to="/reports"
-              class="rounded-lg transition-colors"
-              active-class="active"
-            >
-              Relatórios
             </RouterLink>
           </li>
         </ul>

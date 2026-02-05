@@ -41,7 +41,10 @@ function removeProduct(id) {
   <div class="space-y-6">
     <div class="flex justify-between items-center">
       <h2 class="text-xl font-semibold">Produtos</h2>
-      <RouterLink to="/products/create" class="btn btn-primary">Novo Produto</RouterLink>
+      <div class="flex gap-2">
+        <RouterLink to="/products/create" class="btn btn-primary">Novo Produto</RouterLink>
+        <RouterLink to="/products/upload" class="btn btn-secondary">Upload CSV</RouterLink>
+      </div>
     </div>
 
     <DataTable :columns="columns"
