@@ -16,7 +16,6 @@ const date = ref(new Date().toISOString().substring(0, 10))
 const status = ref('Pendente')
 const observation = ref('')
 const items = ref([])
-const isRevertingSupplier = ref(false)
 
 onMounted(async () => {
     await suppliersStore.fetchSuppliers()
@@ -36,22 +35,9 @@ const totalValue = computed(() => {
 })
 
 watch(supplierId, (newValue, oldValue) => {
-    if (isRevertingSupplier.value) {
-        isRevertingSupplier.value = false
-        return
-    }
-
     if (oldValue !== null && newValue !== oldValue && items.value.length) {
-        const confirmChange = confirm(
-            'Ao trocar o fornecedor, todos os produtos do pedido serão removidos. Deseja continuar?'
-        )
+        items.value = []
 
-        if (confirmChange) {
-            items.value = []
-        } else {
-            isRevertingSupplier.value = true
-            supplierId.value = oldValue
-        }
     }
 })
 
