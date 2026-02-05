@@ -154,9 +154,36 @@ const routes = [
     path: '/orders',
     component: () => import('@/views/orders/Index.vue'),
     meta: { auth: true, layout: 'default', title: 'Pedidos' }
+  },
+  {
+    path: '/orders/create',
+    name: 'orders.create',
+    component: () => import('@/views/orders/Create.vue'),
+    meta: {
+      auth: true,
+      layout: 'default',
+      title: 'Novo Pedido',
+      breadcrumb: [
+        { label: 'Home', to: '/' },
+        { label: 'Pedidos', to: '/orders' }
+      ]
+    }
+  },
+  {
+    path: '/orders/:id/edit',
+    name: 'orders.edit',
+    component: () => import('@/views/orders/Edit.vue'),
+    meta: {
+      auth: true,
+      layout: 'default',
+      title: 'Editar Pedido',
+      breadcrumb: [
+        { label: 'Home', to: '/' },
+        { label: 'Pedidos', to: '/orders' }
+      ]
+    }
   }
 ]
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes

@@ -21,7 +21,16 @@ export const useSuppliersStore = defineStore('suppliers', {
             address: 'Praça da Sé - São Paulo/SP',
             status: 'active',
             sellers: [2, 3]
-        }
+        },
+        {
+            id: 2,
+            name: 'Fornecedor Beta',
+            cnpj: '12.345.678/0001-90',
+            cep: '02002-001',
+            address: 'Rua da Consolação - São Paulo/SP',
+            status: 'active',
+            sellers: [3]
+        },
         ]
 
         this.loading = false

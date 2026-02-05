@@ -17,10 +17,42 @@ export const useProductsStore = defineStore('products', {
           id: 1,
           supplierId: 1,
           reference: 'REF-001',
-          name: 'Produto Alpha',
+          name: 'Produto Alpha 1',
           color: 'Azul',
-          price: 'R$ 199,99'
-        }
+          price: 199.99
+        },
+        {
+          id: 2,
+          supplierId: 1,
+          reference: 'REF-002',
+          name: 'Produto Alpha 2',
+          color: 'Branco',
+          price: 25.00
+        },
+        {
+          id: 3,
+          supplierId: 1,
+          reference: 'REF-003',
+          name: 'Produto Alpha 3',
+          color: 'Preto',
+          price: 50.00
+        },
+        {
+          id: 4,
+          supplierId: 2,
+          reference: 'REF-021',
+          name: 'Produto Beta 1',
+          color: 'Rosa',
+          price: 73.25
+        },{
+          id: 5,
+          supplierId: 2,
+          reference: 'REF-022',
+          name: 'Produto Beta 2',
+          color: 'Verde',
+          price: 88.99
+        },
+
       ]
 
       this.loading = false

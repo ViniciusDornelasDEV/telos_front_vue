@@ -3,6 +3,7 @@ import { reactive, ref, onMounted, computed } from 'vue'
 import { useProductsStore } from '@/stores/products'
 import { useSuppliersStore } from '@/stores/suppliers'
 import { useRouter, useRoute } from 'vue-router'
+import MoneyInput from '@/components/MoneyInput.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -52,10 +53,7 @@ function submit() {
             <input v-model="form.reference" placeholder="Referência" class="input input-bordered w-full" required />
             <input v-model="form.name" placeholder="Nome do produto" class="input input-bordered w-full" required />
             <input v-model="form.color" placeholder="Cor" class="input input-bordered w-full" />
-
-            <input v-model.number="form.price" type="text" placeholder="Preço" class="input input-bordered w-full"
-                min="0" step="0.01" v-mask-money required />
-
+            <MoneyInput v-model="form.price" required class="input input-bordered w-full" />
             <div class="flex gap-2">
                 <button class="btn btn-primary" type="submit">Salvar</button>
                 <RouterLink to="/products" class="btn btn-ghost">Cancelar</RouterLink>
