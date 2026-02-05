@@ -12,7 +12,6 @@ const routes = [
     component: () => import('@/views/Home.vue'),
     meta: { auth: true, layout: 'default', title: 'Dashboard' }
   },
-  
   {
     path: '/suppliers',
     name: 'suppliers.index',
@@ -26,7 +25,6 @@ const routes = [
       ]
     }
   },
-
   {
     path: '/suppliers/create',
     name: 'suppliers.create',
@@ -41,7 +39,6 @@ const routes = [
       ]
     }
   },
-
   {
     path: '/suppliers/:id/edit',
     name: 'suppliers.edit',
@@ -56,11 +53,6 @@ const routes = [
       ]
     }
   },
-
-
-
-
-
   {
     path: '/users',
     name: 'users.index',
@@ -74,7 +66,6 @@ const routes = [
       ]
     }
   },
-
   {
     path: '/users/create',
     name: 'users.create',
@@ -89,7 +80,6 @@ const routes = [
       ]
     }
   },
-
   {
     path: '/users/:id/edit',
     name: 'users.edit',
@@ -104,11 +94,47 @@ const routes = [
       ]
     }
   },
-  
   {
     path: '/products',
+    name: 'products.index',
     component: () => import('@/views/products/Index.vue'),
-    meta: { auth: true, layout: 'default', title: 'Produtos' }
+    meta: {
+      auth: true,
+      layout: 'default',
+      title: 'Produtos',
+      breadcrumb: [
+        { label: 'Home', to: '/' }
+      ]
+    }
+  },
+
+  {
+    path: '/products/create',
+    name: 'products.create',
+    component: () => import('@/views/products/Create.vue'),
+    meta: {
+      auth: true,
+      layout: 'default',
+      title: 'Novo Produto',
+      breadcrumb: [
+        { label: 'Home', to: '/' },
+        { label: 'Produtos', to: '/products' }
+      ]
+    }
+  },
+  {
+    path: '/products/:id/edit',
+    name: 'products.edit',
+    component: () => import('@/views/products/Edit.vue'),
+    meta: {
+      auth: true,
+      layout: 'default',
+      title: 'Editar Produto',
+      breadcrumb: [
+        { label: 'Home', to: '/' },
+        { label: 'Produtos', to: '/products' }
+      ]
+    }
   },
   {
     path: '/orders',
