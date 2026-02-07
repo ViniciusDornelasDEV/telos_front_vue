@@ -33,8 +33,15 @@ function editProduct(id) {
   router.push(`/products/${id}/edit`)
 }
 
-function removeProduct(id) {
-  productsStore.remove(id)
+async function removeProduct(product) {
+  const confirmed = confirm(
+    `Deseja desativar o produto "${product.name}"?`
+  )
+  if (!confirmed) return
+  await productsStore.update({
+    ...product,
+    status: 'inactive'
+  })
 }
 </script>
 
@@ -60,7 +67,7 @@ function removeProduct(id) {
           </div>
 
           <div class="tooltip" data-tip="Excluir">
-            <button class="btn btn-xs btn-ghost text-error" @click="removeProduct(row.id)">
+            <button class="btn btn-xs btn-ghost text-error" @click="removeProduct(row)">
               <Trash2 class="w-4 h-4" />
             </button>
           </div>

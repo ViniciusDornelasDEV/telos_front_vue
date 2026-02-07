@@ -42,10 +42,7 @@ export const useSuppliersStore = defineStore('suppliers', {
         cnpj: apiSupplier.cnpj,
         cep: apiSupplier.cep,
         address: apiSupplier.address,
-        status:
-          apiSupplier.status === 'Ativo'
-            ? 'active'
-            : 'inactive',
+        status: apiSupplier.status,
         sellers: apiSupplier.sellers || []
       }
     }

@@ -13,49 +13,38 @@ const productsStore = useProductsStore()
 
 const supplierId = ref(null)
 const date = ref(new Date().toISOString().substring(0, 10))
-const status = ref('Pendente')
 const observation = ref('')
 const items = ref([])
 
 onMounted(async () => {
     await suppliersStore.fetchSuppliers()
-    await productsStore.fetchProducts()
-
 })
 
-const filteredProducts = computed(() => {
-    if (!supplierId.value) return []
-    return productsStore.items.filter(p => p.supplierId === supplierId.value)
-})
-
-const totalValue = computed(() => {
-    return items.value.reduce((total, item) => {
-        return total + (Number(item.unitPrice) || 0) * (Number(item.quantity) || 0)
-    }, 0)
-})
-
-watch(supplierId, (newValue, oldValue) => {
-    if (oldValue !== null && newValue !== oldValue && items.value.length) {
+watch(supplierId, async (newValue, oldValue) => {
+    if (newValue !== oldValue) {
         items.value = []
-
+        await productsStore.fetchBySupplier(newValue)
     }
 })
+
+const totalValue = computed(() =>
+    items.value.reduce(
+        (total, item) =>
+            total + (Number(item.unitPrice) || 0) * (Number(item.quantity) || 0),
+        0
+    )
+)
 
 function addItem() {
     items.value.push({
         productId: null,
         unitPrice: 0,
-        quantity: 1,
+        quantity: 1
     })
 }
 
 function handleProductChange(item) {
-    if (!item.productId) return
-
-    const product = productsStore.items.find(
-        p => p.id === item.productId
-    )
-
+    const product = productsStore.items.find(p => p.id === item.productId)
     if (product) {
         item.unitPrice = Number(product.price) || 0
     }
@@ -69,15 +58,14 @@ async function submit() {
     await ordersStore.create({
         supplierId: supplierId.value,
         date: date.value,
-        status: status.value,
         observation: observation.value,
-        products: items.value,
+        products: items.value
     })
 
+    productsStore.clear()
     router.push('/orders')
 }
 </script>
-
 <template>
     <div class="space-y-6">
         <h2 class="text-xl font-semibold">Novo Pedido</h2>
@@ -128,7 +116,7 @@ async function submit() {
                             <select v-model="item.productId" class="select select-bordered w-full"
                                 @change="handleProductChange(item)">
                                 <option :value="null" disabled>Selecione</option>
-                                <option v-for="p in filteredProducts" :key="p.id" :value="p.id">
+                                <option v-for="p in productsStore.items" :key="p.id" :value="p.id">
                                     {{ p.name }}
                                 </option>
                             </select>

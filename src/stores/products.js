@@ -5,7 +5,8 @@ export const useProductsStore = defineStore('products', {
   state: () => ({
     items: [],
     loading: false,
-    importing: false
+    importing: false,
+    supplierId: null
   }),
 
   actions: {
@@ -19,7 +20,6 @@ export const useProductsStore = defineStore('products', {
         this.loading = false
       }
     },
-
     async create(payload) {
       const { data } = await http.post('/products', {
         supplier_id: payload.supplierId,
@@ -32,7 +32,6 @@ export const useProductsStore = defineStore('products', {
 
       this.items.push(this.mapFromApi(data))
     },
-
     async update(payload) {
       const { data } = await http.put(`/products/${payload.id}`, {
         supplier_id: payload.supplierId,
@@ -52,7 +51,6 @@ export const useProductsStore = defineStore('products', {
 
       return product
     },
-
     async importCsv({ file, supplierId }) {
       this.importing = true
 
@@ -76,13 +74,42 @@ export const useProductsStore = defineStore('products', {
         this.importing = false
       }
     },
+    async fetchBySupplier(supplierId) {
+      if (!supplierId) {
+        this.items = []
+        this.supplierId = null
+        return
+      }
+
+      if (this.supplierId === supplierId && this.items.length) {
+        return
+      }
+
+      this.loading = true
+      this.supplierId = supplierId
+
+      try {
+        const { data } = await http.get(
+          `/suppliers/${supplierId}/products`
+        )
+
+        this.items = data.map(this.mapFromApi)
+      } finally {
+        this.loading = false
+      }
+    },
+    clear() {
+      this.items = []
+      this.supplierId = null
+    },
 
     mapFromApi(apiProduct) {
       const normalizeStatus = status => {
-      if (status === 'Ativo' || status === 'active') return 'active'
-      if (status === 'Inativo' || status === 'inactive') return 'inactive'
+        if (status === 'Ativo' || status === 'active') return 'active'
+        if (status === 'Inativo' || status === 'inactive') return 'inactive'
         return status
       }
+
       return {
         id: apiProduct.id,
         supplierId: apiProduct.supplier_id,
@@ -95,3 +122,4 @@ export const useProductsStore = defineStore('products', {
     }
   }
 })
+

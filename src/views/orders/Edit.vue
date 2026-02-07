@@ -21,17 +21,17 @@ const status = ref('')
 const observation = ref('')
 const items = ref([])
 const originalOrder = ref(null)
+
 const isReadOnly = computed(() => {
     if (!originalOrder.value) return true
     return originalOrder.value.status !== 'Pendente'
 })
 
-
 onMounted(async () => {
     await suppliersStore.fetchSuppliers()
-    await productsStore.fetchProducts()
 
     const order = ordersStore.fetchById(orderId)
+    if (!order) return
 
     originalOrder.value = order
 
@@ -40,6 +40,11 @@ onMounted(async () => {
     status.value = order.status
     observation.value = order.observation
 
+    // 🔥 NOVO: busca produtos do fornecedor do pedido
+    if (supplierId.value) {
+        await productsStore.fetchBySupplier(supplierId.value)
+    }
+
     items.value = order.items.map(i => ({
         productId: i.productId,
         unitPrice: Number(i.unitPrice),
@@ -47,25 +52,22 @@ onMounted(async () => {
     }))
 })
 
-const filteredProducts = computed(() => {
-    if (!supplierId.value) return []
-    return productsStore.items.filter(
-        p => p.supplierId === supplierId.value
-    )
-})
-
-const totalValue = computed(() => {
-    return items.value.reduce((total, item) => {
-        return total + (Number(item.unitPrice) || 0) * (Number(item.quantity) || 0)
-    }, 0)
-})
-
-watch(supplierId, (newValue, oldValue) => {
+// 🔥 NOVO: ao trocar fornecedor, refaz a busca
+watch(supplierId, async (newValue, oldValue) => {
     if (isReadOnly.value) return
-    if (oldValue !== null && newValue !== oldValue && items.value.length) {
+    if (newValue !== oldValue) {
         items.value = []
+        await productsStore.fetchBySupplier(newValue)
     }
 })
+
+const totalValue = computed(() =>
+    items.value.reduce(
+        (total, item) =>
+            total + (Number(item.unitPrice) || 0) * (Number(item.quantity) || 0),
+        0
+    )
+)
 
 function addItem() {
     if (isReadOnly.value) return
@@ -73,17 +75,14 @@ function addItem() {
     items.value.push({
         productId: null,
         unitPrice: 0,
-        quantity: 1,
+        quantity: 1
     })
 }
 
 function handleProductChange(item) {
     if (isReadOnly.value || !item.productId) return
 
-    const product = productsStore.items.find(
-        p => p.id === item.productId
-    )
-
+    const product = productsStore.items.find(p => p.id === item.productId)
     if (product) {
         item.unitPrice = Number(product.price) || 0
     }
@@ -93,6 +92,7 @@ function removeItem(index) {
     if (isReadOnly.value) return
     items.value.splice(index, 1)
 }
+
 async function submit() {
     if (isReadOnly.value) return
 
@@ -108,6 +108,7 @@ async function submit() {
         }))
     })
 
+    productsStore.clear()
     router.push('/orders')
 }
 </script>
@@ -176,7 +177,7 @@ async function submit() {
                             <select v-model="item.productId" class="select select-bordered w-full"
                                 :disabled="isReadOnly" @change="handleProductChange(item)">
                                 <option :value="null" disabled>Selecione</option>
-                                <option v-for="p in filteredProducts" :key="p.id" :value="p.id">
+                                <option v-for="p in productsStore.items" :key="p.id" :value="p.id">
                                     {{ p.name }}
                                 </option>
                             </select>
