@@ -8,7 +8,6 @@ const auth = useAuthStore()
 const router = useRouter()
 const { title, breadcrumbs } = usePage()
 const isAdmin = computed(() => auth.user?.type === 'admin')
-const isSeller = computed(() => auth.user?.type === 'seller')
 
 function logout() {
   auth.logout()
