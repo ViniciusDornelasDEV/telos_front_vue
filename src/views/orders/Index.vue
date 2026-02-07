@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useOrdersStore } from '@/stores/orders'
 import DataTable from '@/components/DataTable.vue'
@@ -16,33 +16,53 @@ const columns = [
   { label: 'Status', key: 'status' }
 ]
 
-const rows = computed(() =>
-  ordersStore.items.map(order => {
-    const totalValue = order.products.reduce(
-      (sum, p) => sum + p.unitPrice * p.quantity,
-      0
-    )
+onMounted(() => {
+  ordersStore.fetchOrders()
+})
 
-    return {
-      id: order.id,
-      supplierName: order.supplier?.name ?? '—',
-      date: order.date,
-      productsCount: order.products.length,
-      total: `R$ ${totalValue.toFixed(2)}`,
-      status: order.status
-    }
-  })
+const rows = computed(() =>
+  ordersStore.items.map(order => ({
+    id: order.id,
+    supplierName: order.supplier?.name ?? '—',
+    date: order.date,
+    productsCount: order.items.length,
+    total: `R$ ${order.total.toFixed(2)}`,
+    status: order.status
+  }))
 )
 
 function editOrder(id) {
   router.push(`/orders/${id}/edit`)
 }
 
-function removeOrder(id) {
-  if (confirm('Tem certeza que deseja excluir este pedido?')) {
-    ordersStore.remove(id)
+async function cancelOrder(id) {
+  const order = ordersStore.fetchById(id)
+  if (!order) return
+
+  if (order.status !== 'Pendente') {
+    alert('Apenas pedidos pendentes podem ser cancelados.')
+    return
   }
+
+  const confirmed = confirm(
+    `Deseja cancelar o pedido #${order.id}?`
+  )
+
+  if (!confirmed) return
+
+  await ordersStore.update({
+    id: order.id,
+    date: order.date,
+    observation: order.observation,
+    status: 'Cancelado',
+    products: order.items.map(i => ({
+      id: i.productId,
+      unitPrice: i.unitPrice,
+      quantity: i.quantity
+    }))
+  })
 }
+
 </script>
 
 <template>
@@ -64,9 +84,11 @@ function removeOrder(id) {
           </div>
 
           <div class="tooltip" data-tip="Excluir">
-            <button class="btn btn-xs btn-ghost text-error" @click="removeOrder(row.id)">
+            <button class="btn btn-xs btn-ghost text-error" :disabled="row.status !== 'Pendente'"
+              @click="cancelOrder(row.id)">
               <Trash2 class="w-4 h-4" />
             </button>
+
           </div>
         </div>
       </template>

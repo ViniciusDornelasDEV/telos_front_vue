@@ -38,7 +38,7 @@ function submit() {
             </select>
 
             <select v-model="form.type" class="select select-bordered w-full">
-                <option value="vendedor">Vendedor</option>
+                <option value="seller">Vendedor</option>
                 <option value="admin">Admin</option>
             </select>
 

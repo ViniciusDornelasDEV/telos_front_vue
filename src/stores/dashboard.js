@@ -1,46 +1,85 @@
 import { defineStore } from 'pinia'
+import { computed } from 'vue'
+import { useOrdersStore } from './orders'
 
-export const useDashboardStore = defineStore('dashboard', {
-  state: () => ({
-    loading: false,
-    summary: null,
-  }),
+export const useDashboardStore = defineStore('dashboard', () => {
+  const ordersStore = useOrdersStore()
 
-  actions: {
-    async fetchSummary() {
-      this.loading = true
+  const summary = computed(() => {
+    const orders = ordersStore.items.filter(
+      o => o.status !== 'Cancelado'
+    )
 
-      // fake API / cache
-      await new Promise(r => setTimeout(r, 500))
+    const last30Days = new Date()
+    last30Days.setDate(last30Days.getDate() - 30)
 
-      this.summary = {
-        totalSales: 18250.75,
-        ordersCount: 42,
-        avgTicket: 434.54,
-        productsSold: 128,
+    const recentOrders = orders.filter(
+      o => new Date(o.date) >= last30Days
+    )
 
-        salesByDay: [
-          { date: '01/01', total: 500 },
-          { date: '02/01', total: 720 },
-          { date: '03/01', total: 320 },
-          { date: '04/01', total: 890 },
-          { date: '05/01', total: 610 },
-        ],
+    const totalSales = recentOrders.reduce(
+      (sum, o) => sum + o.total,
+      0
+    )
 
-        salesBySupplier: [
-          { name: 'Fornecedor A', total: 7200 },
-          { name: 'Fornecedor B', total: 5400 },
-          { name: 'Fornecedor C', total: 3650 },
-        ],
+    const ordersCount = recentOrders.length
 
-        lastOrders: [
-          { id: 1, supplier: 'Fornecedor A', total: 520, status: 'Concluído' },
-          { id: 2, supplier: 'Fornecedor B', total: 890, status: 'Pendente' },
-          { id: 3, supplier: 'Fornecedor C', total: 210, status: 'Cancelado' },
-        ]
-      }
+    const avgTicket = ordersCount
+      ? totalSales / ordersCount
+      : 0
 
-      this.loading = false
+    const productsSold = recentOrders.reduce(
+      (sum, o) =>
+        sum +
+        o.items.reduce((s, i) => s + i.quantity, 0),
+      0
+    )
+
+    const salesByDayMap = {}
+
+    recentOrders.forEach(o => {
+      salesByDayMap[o.date] =
+        (salesByDayMap[o.date] || 0) + o.total
+    })
+
+    const salesByDay = Object.entries(salesByDayMap).map(
+      ([date, total]) => ({ date, total })
+    )
+
+    const salesBySupplierMap = {}
+
+    recentOrders.forEach(o => {
+      const name = o.supplier?.name ?? '—'
+      salesBySupplierMap[name] =
+        (salesBySupplierMap[name] || 0) + o.total
+    })
+
+    const salesBySupplier = Object.entries(
+      salesBySupplierMap
+    ).map(([name, total]) => ({ name, total }))
+
+    const lastOrders = [...orders]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 5)
+      .map(o => ({
+        id: o.id,
+        supplier: o.supplier?.name ?? '—',
+        total: o.total,
+        status: o.status
+      }))
+
+    return {
+      totalSales,
+      ordersCount,
+      avgTicket,
+      productsSold,
+      salesByDay,
+      salesBySupplier,
+      lastOrders
     }
+  })
+
+  return {
+    summary
   }
 })

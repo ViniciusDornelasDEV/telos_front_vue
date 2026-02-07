@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import http from '@/api/http'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -11,18 +12,26 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    loginFake() {
-      this.token = 'fake-token-123'
-      this.user = {
-        name: 'Usuário Admin',
-        role: 'admin'
-      }
+    async login(email, password) {
+      const { data } = await http.post('/login', {
+        email,
+        password
+      })
+
+      this.token = data.token
+      this.user = data.user
 
       localStorage.setItem('token', this.token)
       localStorage.setItem('user', JSON.stringify(this.user))
     },
 
-    logout() {
+    async logout() {
+      try {
+        await http.post('/logout')
+      } catch (e) {
+        // se falhar, seguimos limpando local
+      }
+
       this.token = null
       this.user = null
 

@@ -20,7 +20,8 @@ const columns = [
   { label: 'Referência', key: 'reference' },
   { label: 'Nome', key: 'name' },
   { label: 'Cor', key: 'color' },
-  { label: 'Preço', key: 'price' }
+  { label: 'Preço', key: 'price' },
+  { label: 'Status', key: 'status' }
 ]
 
 function getSupplierName(supplierId) {

@@ -31,10 +31,6 @@ function logout() {
 
         <!-- Title + breadcrumb -->
         <div class="flex-1 flex flex-col gap-1">
-          <h1 class="text-lg font-semibold leading-tight">
-            {{ title }}
-          </h1>
-
           <nav class="text-sm breadcrumbs">
             <ul>
               <li v-for="(item, index) in breadcrumbs" :key="index">

@@ -9,15 +9,20 @@ const router = useRouter()
 const email = ref('')
 const password = ref('')
 const loading = ref(false)
+const error = ref(null)
 
 async function login() {
   loading.value = true
+  error.value = null
 
-  // fake delay só pra UX
-  setTimeout(() => {
-    auth.loginFake()
+  try {
+    await auth.login(email.value, password.value)
     router.push('/')
-  }, 600)
+  } catch (e) {
+    error.value = 'E-mail ou senha inválidos'
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 <template>
@@ -29,7 +34,11 @@ async function login() {
         </h1>
 
         <p class="text-sm text-center text-base-content/70">
-          Protótipo • Login fictício
+          Login real • API
+        </p>
+
+        <p v-if="error" class="text-sm text-error text-center">
+          {{ error }}
         </p>
 
         <div class="form-control">

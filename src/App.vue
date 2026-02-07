@@ -1,5 +1,13 @@
 <script setup>
+import { onMounted } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
+
+const auth = useAuthStore()
+
+onMounted(() => {
+  auth.loadFromStorage()
+})
 </script>
 
 <template>

@@ -20,24 +20,30 @@ const date = ref('')
 const status = ref('')
 const observation = ref('')
 const items = ref([])
+const originalOrder = ref(null)
+const isReadOnly = computed(() => {
+    if (!originalOrder.value) return true
+    return originalOrder.value.status !== 'Pendente'
+})
 
-const isRevertingSupplier = ref(false)
-
-const isReadOnly = computed(() => status.value !== 'Pendente')
 
 onMounted(async () => {
     await suppliersStore.fetchSuppliers()
     await productsStore.fetchProducts()
-    const order = await ordersStore.fetchById(orderId)
 
-    supplierId.value = order.supplier.id
+    const order = ordersStore.fetchById(orderId)
+
+    originalOrder.value = order
+
+    supplierId.value = order.supplier?.id ?? null
     date.value = order.date
     status.value = order.status
     observation.value = order.observation
-    items.value = order.products.map(p => ({
-        productId: p.id,
-        unitPrice: Number(p.unitPrice),
-        quantity: Number(p.quantity)
+
+    items.value = order.items.map(i => ({
+        productId: i.productId,
+        unitPrice: Number(i.unitPrice),
+        quantity: Number(i.quantity)
     }))
 })
 
@@ -87,13 +93,11 @@ function removeItem(index) {
     if (isReadOnly.value) return
     items.value.splice(index, 1)
 }
-
 async function submit() {
     if (isReadOnly.value) return
 
-    ordersStore.update({
+    await ordersStore.update({
         id: Number(orderId),
-        supplier: suppliersStore.items.find(s => s.id === supplierId.value),
         date: date.value,
         status: status.value,
         observation: observation.value,
@@ -106,7 +110,6 @@ async function submit() {
 
     router.push('/orders')
 }
-
 </script>
 <template>
     <div class="space-y-6">

@@ -1,90 +1,97 @@
 import { defineStore } from 'pinia'
+import http from '@/api/http'
 
 export const useProductsStore = defineStore('products', {
   state: () => ({
     items: [],
-    loading: false
+    loading: false,
+    importing: false
   }),
 
   actions: {
     async fetchProducts() {
       this.loading = true
-      this.items = []
-      await new Promise(resolve => setTimeout(resolve, 500))
 
-      this.items = [
-        {
-          id: 1,
-          supplierId: 1,
-          reference: 'REF-001',
-          name: 'Produto Alpha 1',
-          color: 'Azul',
-          price: 199.99
-        },
-        {
-          id: 2,
-          supplierId: 1,
-          reference: 'REF-002',
-          name: 'Produto Alpha 2',
-          color: 'Branco',
-          price: 25.00
-        },
-        {
-          id: 3,
-          supplierId: 1,
-          reference: 'REF-003',
-          name: 'Produto Alpha 3',
-          color: 'Preto',
-          price: 50.00
-        },
-        {
-          id: 4,
-          supplierId: 2,
-          reference: 'REF-021',
-          name: 'Produto Beta 1',
-          color: 'Rosa',
-          price: 73.25
-        },{
-          id: 5,
-          supplierId: 2,
-          reference: 'REF-022',
-          name: 'Produto Beta 2',
-          color: 'Verde',
-          price: 88.99
-        },
-
-      ]
-
-      this.loading = false
-    },
-
-    create(data) {
-      this.items.push({
-        id: Date.now(),
-        ...data
-      })
-    },
-
-    update(data) {
-      const index = this.items.findIndex(p => p.id === data.id)
-      if (index !== -1) {
-        this.items[index] = { ...data }
+      try {
+        const { data } = await http.get('/products')
+        this.items = data.map(this.mapFromApi)
+      } finally {
+        this.loading = false
       }
     },
 
-    remove(id) {
-      this.items = this.items.filter(p => p.id !== id)
+    async create(payload) {
+      const { data } = await http.post('/products', {
+        supplier_id: payload.supplierId,
+        reference: payload.reference,
+        name: payload.name,
+        color: payload.color,
+        price: payload.price,
+        status: payload.status
+      })
+
+      this.items.push(this.mapFromApi(data))
     },
 
-    async uploadCsv(formData) {
+    async update(payload) {
+      const { data } = await http.put(`/products/${payload.id}`, {
+        supplier_id: payload.supplierId,
+        reference: payload.reference,
+        name: payload.name,
+        color: payload.color,
+        price: payload.price,
+        status: payload.status
+      })
+
+      const product = this.mapFromApi(data)
+
+      const index = this.items.findIndex(p => p.id === payload.id)
+      if (index !== -1) {
+        this.items.splice(index, 1, product)
+      }
+
+      return product
+    },
+
+    async importCsv({ file, supplierId }) {
+      this.importing = true
+
       try {
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        return { success: true, message: 'Upload simulado com sucesso!' }
-      } catch (error) {
-        console.error(error)
-        throw error
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('supplier_id', supplierId)
+
+        const { data } = await http.post(
+          '/products/import',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        )
+
+        return data
+      } finally {
+        this.importing = false
+      }
+    },
+
+    mapFromApi(apiProduct) {
+      const normalizeStatus = status => {
+      if (status === 'Ativo' || status === 'active') return 'active'
+      if (status === 'Inativo' || status === 'inactive') return 'inactive'
+        return status
+      }
+      return {
+        id: apiProduct.id,
+        supplierId: apiProduct.supplier_id,
+        reference: apiProduct.reference,
+        name: apiProduct.name,
+        color: apiProduct.color,
+        price: Number(apiProduct.price),
+        status: normalizeStatus(apiProduct.status)
       }
     }
-
   }
 })

@@ -98,15 +98,6 @@ async function submit() {
                 <input type="date" v-model="date" class="input input-bordered w-full" />
             </div>
 
-            <div>
-                <label class="label">Status</label>
-                <select v-model="status" class="select select-bordered w-full">
-                    <option>Pendente</option>
-                    <option>Concluído</option>
-                    <option>Cancelado</option>
-                </select>
-            </div>
-
             <div class="col-span-2">
                 <label class="label">Observação</label>
                 <textarea v-model="observation" class="textarea textarea-bordered w-full" />

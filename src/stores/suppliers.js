@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import http from '@/api/http'
 
 export const useSuppliersStore = defineStore('suppliers', {
   state: () => ({
@@ -8,54 +9,45 @@ export const useSuppliersStore = defineStore('suppliers', {
 
   actions: {
     async fetchSuppliers() {
-        this.loading = true
-        this.items = []
-        await new Promise(resolve => setTimeout(resolve, 1000))
+      this.loading = true
 
-        this.items = [
-        {
-            id: 1,
-            name: 'Fornecedor Alpha',
-            cnpj: '76.060.377/0001-06',
-            cep: '01001-000',
-            address: 'Praça da Sé - São Paulo/SP',
-            status: 'active',
-            sellers: [2, 3]
-        },
-        {
-            id: 2,
-            name: 'Fornecedor Beta',
-            cnpj: '12.345.678/0001-90',
-            cep: '02002-001',
-            address: 'Rua da Consolação - São Paulo/SP',
-            status: 'active',
-            sellers: [3]
-        },
-        ]
-
+      try {
+        const { data } = await http.get('/suppliers')
+        this.items = data.map(this.mapFromApi)
+      } finally {
         this.loading = false
-    },
-
-    create(data) {
-    this.items.push({
-        id: Date.now(),
-        name: data.name,
-        cnpj: data.cnpj,
-        cep: data.cep,
-        address: data.address,
-        status: data.status
-    })
-    },
-
-    update(data) {
-      const index = this.items.findIndex(s => s.id === data.id)
-      if (index !== -1) {
-        this.items[index] = { ...data }
       }
     },
+    async create(payload) {
+      const { data } = await http.post('/suppliers', payload)
 
-    remove(id) {
-      this.items = this.items.filter(s => s.id !== id)
+      this.items.push(this.mapFromApi(data))
+    },
+    async update(payload) {
+      const { data } = await http.put(`/suppliers/${payload.id}`, payload)
+
+      const supplier = this.mapFromApi(data)
+
+      const index = this.items.findIndex(s => s.id === payload.id)
+      if (index !== -1) {
+        this.items.splice(index, 1, supplier)
+      }
+
+      return supplier
+    },
+    mapFromApi(apiSupplier) {
+      return {
+        id: apiSupplier.id,
+        name: apiSupplier.name,
+        cnpj: apiSupplier.cnpj,
+        cep: apiSupplier.cep,
+        address: apiSupplier.address,
+        status:
+          apiSupplier.status === 'Ativo'
+            ? 'active'
+            : 'inactive',
+        sellers: apiSupplier.sellers || []
+      }
     }
   }
 })

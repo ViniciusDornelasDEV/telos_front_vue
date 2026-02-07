@@ -31,11 +31,10 @@ async function submit() {
     uploading.value = true
 
     try {
-        const formData = new FormData()
-        formData.append('file', file.value)
-        formData.append('supplier_id', supplierId.value)
-
-        await productsStore.uploadCsv(formData)
+        await productsStore.importCsv({
+            file: file.value,
+            supplierId: supplierId.value
+        })
 
         alert('Upload iniciado! Você receberá um email quando o processamento terminar.')
         router.push('/products')
@@ -46,6 +45,7 @@ async function submit() {
         uploading.value = false
     }
 }
+
 </script>
 
 <template>

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import http from '@/api/http'
 
 export const useUsersStore = defineStore('users', {
   state: () => ({
@@ -9,34 +10,68 @@ export const useUsersStore = defineStore('users', {
   actions: {
     async fetchUsers() {
       this.loading = true
-      this.items = []
-      await new Promise(resolve => setTimeout(resolve, 500))
-      this.items = [
-        { id: 1, name: 'Admin', email: 'admin@teste.com', status: 'active', type: 'admin' },
-        { id: 2, name: 'João Vendedor', email: 'joao@teste.com', status: 'active', type: 'vendedor' },
-        { id: 3, name: 'Maria Vendedora', email: 'maria@teste.com', status: 'inactive', type: 'vendedor' }
-      ]
-      this.loading = false
+
+      try {
+        const { data } = await http.get('/users')
+        this.items = data.map(this.mapFromApi)
+      } finally {
+        this.loading = false
+      }
     },
 
-    create(data) {
-      this.items.push({
-        id: Date.now(),
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        status: data.status,
-        type: data.type
+    async create(payload) {
+      const { data } = await http.post('/users', {
+        name: payload.name,
+        email: payload.email,
+        password: payload.password,
+        type: payload.type,
+        status: payload.status
+      })
+
+      this.items.push(this.mapFromApi(data))
+    },
+
+    async update(payload) {
+      const { data } = await http.put(`/users/${payload.id}`, {
+        name: payload.name,
+        email: payload.email,
+        password: payload.password || '',
+        type: payload.type,
+        status: payload.status
+      })
+
+      const user = this.mapFromApi(data)
+
+      const index = this.items.findIndex(u => u.id === payload.id)
+      if (index !== -1) {
+        this.items.splice(index, 1, user)
+      }
+
+      return user
+    },
+
+    async deactivate(user) {
+      return this.update({
+        ...user,
+        status: 'inactive',
+        password: ''
       })
     },
 
-    update(data) {
-      const index = this.items.findIndex(u => u.id === data.id)
-      if (index !== -1) this.items[index] = { ...data }
-    },
+    mapFromApi(apiUser) {
+      const normalizeStatus = status => {
+      if (status === 'Ativo' || status === 'active') return 'active'
+      if (status === 'Inativo' || status === 'inactive') return 'inactive'
+        return status
+      }
 
-    remove(id) {
-      this.items = this.items.filter(u => u.id !== id)
+      return {
+        id: apiUser.id,
+        name: apiUser.name,
+        email: apiUser.email,
+        status: normalizeStatus(apiUser.status),
+        type: apiUser.type
+      }
     }
   }
 })

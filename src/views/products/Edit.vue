@@ -54,6 +54,10 @@ function submit() {
             <input v-model="form.name" placeholder="Nome do produto" class="input input-bordered w-full" required />
             <input v-model="form.color" placeholder="Cor" class="input input-bordered w-full" />
             <MoneyInput v-model="form.price" required class="input input-bordered w-full" />
+            <select v-model="form.status" class="select select-bordered w-full">
+                <option value="active">Ativo</option>
+                <option value="inactive">Inativo</option>
+            </select>
             <div class="flex gap-2">
                 <button class="btn btn-primary" type="submit">Salvar</button>
                 <RouterLink to="/products" class="btn btn-ghost">Cancelar</RouterLink>

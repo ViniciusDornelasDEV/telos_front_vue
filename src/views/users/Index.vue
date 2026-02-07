@@ -5,6 +5,7 @@ import DataTable from '@/components/DataTable.vue'
 import { Pencil, Trash2 } from 'lucide-vue-next'
 
 const usersStore = useUsersStore()
+
 const columns = [
   { label: 'Nome', key: 'name' },
   { label: 'Email', key: 'email' },
@@ -15,8 +16,17 @@ const columns = [
 onMounted(() => {
   usersStore.fetchUsers()
 })
-</script>
 
+function deactivateUser(user) {
+  const confirmed = confirm(
+    `Deseja desativar o usuário "${user.name}"?`
+  )
+
+  if (!confirmed) return
+
+  usersStore.deactivate(user)
+}
+</script>
 <template>
   <div class="space-y-6">
     <div class="flex justify-between items-center">
@@ -31,7 +41,7 @@ onMounted(() => {
             <Pencil class="w-4 h-4" />
           </RouterLink>
 
-          <button class="btn btn-xs btn-ghost text-error" @click="usersStore.remove(row.id)">
+          <button class="btn btn-xs btn-ghost text-error" @click="deactivateUser(row)">
             <Trash2 class="w-4 h-4" />
           </button>
         </div>

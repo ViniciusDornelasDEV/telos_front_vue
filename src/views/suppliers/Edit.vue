@@ -74,15 +74,20 @@ function removeSeller(id) {
   form.sellers = form.sellers.filter(s => s !== id)
 }
 
-function submit() {
+async function submit() {
   if (!validateCnpj(form.cnpj)) {
     cnpjError.value = 'CNPJ inválido'
     return
   }
   cnpjError.value = ''
-  suppliersStore.update(form)
+  const updatedSupplier = await suppliersStore.update({
+    ...form,
+    sellers: [...form.sellers]
+  })
+  Object.assign(form, updatedSupplier)
   router.push('/suppliers')
 }
+
 </script>
 
 <template>
