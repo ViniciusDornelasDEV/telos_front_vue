@@ -35,7 +35,7 @@ onMounted(async () => {
   if (usersStore.items.length === 0) {
     await usersStore.fetchUsers()
   }
-  sellersOptions.value = usersStore.items.filter(u => u.type === 'vendedor')
+  sellersOptions.value = usersStore.items.filter(u => u.type === 'Vendedor')
 })
 
 async function handleCepBlur() {

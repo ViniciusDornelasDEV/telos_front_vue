@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import http from '@/api/http'
+import { resetAllStores } from '@/stores/resetStores'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -34,7 +35,7 @@ export const useAuthStore = defineStore('auth', {
 
       this.token = null
       this.user = null
-
+      resetAllStores()
       localStorage.removeItem('token')
       localStorage.removeItem('user')
     },

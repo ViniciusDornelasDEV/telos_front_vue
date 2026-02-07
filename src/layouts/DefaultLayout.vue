@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 import { usePage } from '@/composables/usePage'
@@ -6,6 +7,8 @@ import { usePage } from '@/composables/usePage'
 const auth = useAuthStore()
 const router = useRouter()
 const { title, breadcrumbs } = usePage()
+const isAdmin = computed(() => auth.user?.type === 'admin')
+const isSeller = computed(() => auth.user?.type === 'seller')
 
 function logout() {
   auth.logout()
@@ -76,13 +79,13 @@ function logout() {
             </RouterLink>
           </li>
 
-          <li>
+          <li v-if="isAdmin">
             <RouterLink to="/users" class="rounded-lg transition-colors" active-class="active">
               Usuários
             </RouterLink>
           </li>
 
-          <li>
+          <li v-if="isAdmin">
             <RouterLink to="/suppliers" class="rounded-lg transition-colors" active-class="active">
               Fornecedores
             </RouterLink>
