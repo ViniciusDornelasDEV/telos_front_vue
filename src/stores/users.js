@@ -50,26 +50,12 @@ export const useUsersStore = defineStore('users', {
       return user
     },
 
-    async deactivate(user) {
-      return this.update({
-        ...user,
-        status: 'inactive',
-        password: ''
-      })
-    },
-
     mapFromApi(apiUser) {
-      const normalizeStatus = status => {
-      if (status === 'Ativo' || status === 'active') return 'active'
-      if (status === 'Inativo' || status === 'inactive') return 'inactive'
-        return status
-      }
-
       return {
         id: apiUser.id,
         name: apiUser.name,
         email: apiUser.email,
-        status: normalizeStatus(apiUser.status),
+        status: Boolean(apiUser.status),
         type: apiUser.type
       }
     }

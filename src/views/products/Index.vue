@@ -40,7 +40,7 @@ async function removeProduct(product) {
   if (!confirmed) return
   await productsStore.update({
     ...product,
-    status: 'inactive'
+    status: false
   })
 }
 </script>
@@ -58,6 +58,12 @@ async function removeProduct(product) {
     <DataTable :columns="columns"
       :rows="productsStore.items.map(p => ({ ...p, supplierName: getSupplierName(p.supplierId) }))"
       :loading="productsStore.loading" :per-page="5">
+      <template #cell-status="{ row }">
+        <span class="badge" :class="row.status ? 'badge-success' : 'badge-error'">
+          {{ row.status ? 'Ativo' : 'Inativo' }}
+        </span>
+      </template>
+
       <template #actions="{ row }">
         <div class="flex justify-end gap-2">
           <div class="tooltip" data-tip="Editar">

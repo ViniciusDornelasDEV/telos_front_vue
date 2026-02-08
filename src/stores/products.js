@@ -117,7 +117,7 @@ export const useProductsStore = defineStore('products', {
         name: apiProduct.name,
         color: apiProduct.color,
         price: Number(apiProduct.price),
-        status: normalizeStatus(apiProduct.status)
+        status: Boolean(apiProduct.status)
       }
     }
   }

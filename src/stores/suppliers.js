@@ -8,11 +8,13 @@ export const useSuppliersStore = defineStore('suppliers', {
   }),
 
   actions: {
-    async fetchSuppliers() {
+    async fetchSuppliers(activeOnly = false) {
       this.loading = true
 
       try {
-        const { data } = await http.get('/suppliers')
+        const { data } = await http.get('/suppliers', {
+          params: activeOnly ? { active: 1 } : {}
+        })
         this.items = data.map(this.mapFromApi)
       } finally {
         this.loading = false
@@ -42,7 +44,7 @@ export const useSuppliersStore = defineStore('suppliers', {
         cnpj: apiSupplier.cnpj,
         cep: apiSupplier.cep,
         address: apiSupplier.address,
-        status: apiSupplier.status,
+        status: Boolean(apiSupplier.status),
         sellers: apiSupplier.sellers || []
       }
     }

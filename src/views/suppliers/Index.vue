@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, } from 'vue'
+import { onMounted } from 'vue'
 import { useSuppliersStore } from '@/stores/suppliers'
 import DataTable from '@/components/DataTable.vue'
 import { Pencil, Trash2 } from 'lucide-vue-next'
@@ -27,9 +27,10 @@ async function removeSupplier(supplier) {
     `Deseja desativar o fornecedor "${supplier.name}"?`
   )
   if (!confirmed) return
+
   await suppliersStore.update({
     ...supplier,
-    status: 'inactive'
+    status: false
   })
 }
 </script>
@@ -38,28 +39,32 @@ async function removeSupplier(supplier) {
   <div class="space-y-6">
     <div class="flex justify-between items-center">
       <h2 class="text-xl font-semibold">Fornecedores</h2>
+
       <RouterLink to="/suppliers/create" class="btn btn-primary">
         Novo Fornecedor
       </RouterLink>
     </div>
 
     <DataTable :columns="columns" :rows="suppliersStore.items" :loading="suppliersStore.loading" :per-page="5">
+      <template #cell-status="{ row }">
+        <span class="badge" :class="row.status ? 'badge-success' : 'badge-error'">
+          {{ row.status ? 'Ativo' : 'Inativo' }}
+        </span>
+      </template>
+
       <template #actions="{ row }">
         <div class="flex justify-end gap-2">
-          <!-- Editar -->
           <div class="tooltip" data-tip="Editar">
             <button class="btn btn-xs btn-ghost" @click="editSupplier(row.id)">
               <Pencil class="w-4 h-4" />
             </button>
           </div>
 
-          <!-- Excluir -->
           <div class="tooltip" data-tip="Excluir">
             <button class="btn btn-xs btn-ghost text-error" @click="removeSupplier(row)">
               <Trash2 class="w-4 h-4" />
             </button>
           </div>
-
         </div>
       </template>
     </DataTable>

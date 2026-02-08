@@ -17,14 +17,16 @@ onMounted(() => {
   usersStore.fetchUsers()
 })
 
-function deactivateUser(user) {
+async function removeUser(user) {
   const confirmed = confirm(
     `Deseja desativar o usuário "${user.name}"?`
   )
-
   if (!confirmed) return
 
-  usersStore.deactivate(user)
+  await usersStore.update({
+    ...user,
+    status: false
+  })
 }
 </script>
 <template>
@@ -35,13 +37,19 @@ function deactivateUser(user) {
     </div>
 
     <DataTable :columns="columns" :rows="usersStore.items" :loading="usersStore.loading" :per-page="5">
+      <template #cell-status="{ row }">
+        <span class="badge" :class="row.status ? 'badge-success' : 'badge-error'">
+          {{ row.status ? 'Ativo' : 'Inativo' }}
+        </span>
+      </template>
+
       <template #actions="{ row }">
         <div class="flex justify-end gap-2">
           <RouterLink :to="`/users/${row.id}/edit`" class="btn btn-xs btn-ghost">
             <Pencil class="w-4 h-4" />
           </RouterLink>
 
-          <button class="btn btn-xs btn-ghost text-error" @click="deactivateUser(row)">
+          <button class="btn btn-xs btn-ghost text-error" @click="removeUser(row)">
             <Trash2 class="w-4 h-4" />
           </button>
         </div>

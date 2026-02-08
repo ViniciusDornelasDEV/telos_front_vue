@@ -29,18 +29,13 @@ const isReadOnly = computed(() => {
 
 onMounted(async () => {
     await suppliersStore.fetchSuppliers()
-
     const order = ordersStore.fetchById(orderId)
     if (!order) return
-
     originalOrder.value = order
-
     supplierId.value = order.supplier?.id ?? null
     date.value = order.date
     status.value = order.status
     observation.value = order.observation
-
-    // 🔥 NOVO: busca produtos do fornecedor do pedido
     if (supplierId.value) {
         await productsStore.fetchBySupplier(supplierId.value)
     }
@@ -52,7 +47,6 @@ onMounted(async () => {
     }))
 })
 
-// 🔥 NOVO: ao trocar fornecedor, refaz a busca
 watch(supplierId, async (newValue, oldValue) => {
     if (isReadOnly.value) return
     if (newValue !== oldValue) {

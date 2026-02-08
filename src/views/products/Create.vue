@@ -44,8 +44,8 @@ function submit() {
             <input v-model="form.color" placeholder="Cor" class="input input-bordered w-full" required />
             <MoneyInput v-model="form.price" required class="input input-bordered w-full" />
             <select v-model="form.status" class="select select-bordered w-full">
-                <option value="active">Ativo</option>
-                <option value="inactive">Inativo</option>
+                <option :value="true">Ativo</option>
+                <option :value="false">Inativo</option>
             </select>
             <div class="flex gap-2">
                 <button class="btn btn-primary" type="submit">Salvar</button>

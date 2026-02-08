@@ -77,8 +77,8 @@ function submit() {
       </div>
 
       <select v-model="form.status" class="select select-bordered w-full">
-        <option value="active">Ativo</option>
-        <option value="inactive">Inativo</option>
+        <option :value="true">Ativo</option>
+        <option :value="false">Inativo</option>
       </select>
 
       <div class="flex gap-2">

@@ -47,10 +47,7 @@ watch(
         <table class="table">
           <thead>
             <tr>
-              <th
-                v-for="column in columns"
-                :key="column.key"
-              >
+              <th v-for="column in columns" :key="column.key">
                 {{ column.label }}
               </th>
 
@@ -63,65 +60,47 @@ watch(
           <tbody>
             <!-- SKELETON -->
             <template v-if="loading">
-                <tr v-for="n in perPage" :key="n">
-                <td
-                    v-for="column in columns"
-                    :key="column.key"
-                >
-                    <div class="skeleton h-4 w-full"></div>
+              <tr v-for="n in perPage" :key="n">
+                <td v-for="column in columns" :key="column.key">
+                  <div class="skeleton h-4 w-full"></div>
                 </td>
 
                 <td v-if="$slots.actions">
-                    <div class="skeleton h-4 w-20 ml-auto"></div>
+                  <div class="skeleton h-4 w-20 ml-auto"></div>
                 </td>
-                </tr>
+              </tr>
             </template>
 
             <!-- DADOS -->
             <template v-else>
-                <tr
-                v-for="row in paginatedRows"
-                :key="row.id"
-                class="hover"
-                >
-                <td
-                    v-for="column in columns"
-                    :key="column.key"
-                >
+              <tr v-for="row in paginatedRows" :key="row.id" class="hover">
+                <td v-for="column in columns" :key="column.key">
+                  <slot :name="`cell-${column.key}`" :row="row" :value="row[column.key]">
                     {{ row[column.key] }}
+                  </slot>
                 </td>
 
                 <td v-if="$slots.actions" class="text-right">
-                    <slot name="actions" :row="row" />
+                  <slot name="actions" :row="row" />
                 </td>
-                </tr>
+              </tr>
 
-                <!-- Estado vazio -->
-                <tr v-if="paginatedRows.length === 0">
-                <td
-                    :colspan="columns.length + ($slots.actions ? 1 : 0)"
-                    class="text-center py-6 text-gray-500"
-                >
-                    Nenhum registro encontrado
+              <!-- Estado vazio -->
+              <tr v-if="paginatedRows.length === 0">
+                <td :colspan="columns.length + ($slots.actions ? 1 : 0)" class="text-center py-6 text-gray-500">
+                  Nenhum registro encontrado
                 </td>
-                </tr>
+              </tr>
             </template>
-            </tbody>
+          </tbody>
 
         </table>
       </div>
 
       <!-- Paginação -->
-      <div
-        v-if="totalPages > 1"
-        class="flex justify-end p-4"
-      >
+      <div v-if="totalPages > 1" class="flex justify-end p-4">
         <div class="join">
-          <button
-            class="join-item btn btn-sm"
-            :disabled="currentPage === 1"
-            @click="currentPage--"
-          >
+          <button class="join-item btn btn-sm" :disabled="currentPage === 1" @click="currentPage--">
             «
           </button>
 
@@ -129,11 +108,7 @@ watch(
             Página {{ currentPage }} de {{ totalPages }}
           </button>
 
-          <button
-            class="join-item btn btn-sm"
-            :disabled="currentPage === totalPages"
-            @click="currentPage++"
-          >
+          <button class="join-item btn btn-sm" :disabled="currentPage === totalPages" @click="currentPage++">
             »
           </button>
         </div>

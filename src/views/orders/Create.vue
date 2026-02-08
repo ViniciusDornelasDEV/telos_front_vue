@@ -17,7 +17,7 @@ const observation = ref('')
 const items = ref([])
 
 onMounted(async () => {
-    await suppliersStore.fetchSuppliers()
+    await suppliersStore.fetchSuppliers(true)
 })
 
 watch(supplierId, async (newValue, oldValue) => {

@@ -38,8 +38,8 @@ function submit() {
       <input v-model="form.password" type="password" placeholder="Senha" class="input input-bordered w-full" />
 
       <select v-model="form.status" class="select select-bordered w-full">
-        <option value="active">Ativo</option>
-        <option value="inactive">Inativo</option>
+        <option :value="true">Ativo</option>
+        <option :value="false">Inativo</option>
       </select>
 
       <select v-model="form.type" class="select select-bordered w-full">
