@@ -3,12 +3,23 @@ import {
   fetchSuppliers,
   createSupplier,
   updateSupplier,
-  mapFromApi
+  mapFromApi,
+  type Supplier
 } from '../services/suppliersService'
+
+interface ApiSupplier {
+  id: number
+  name: string
+  cnpj: string
+  cep: string
+  address: string
+  status: boolean
+  sellers?: number[]
+}
 
 export const useSuppliersStore = defineStore('suppliers', {
   state: () => ({
-    items: [],
+    items: [] as Supplier[],
     loading: false
   }),
 
@@ -21,19 +32,19 @@ export const useSuppliersStore = defineStore('suppliers', {
         this.loading = false
       }
     },
-    async create(payload) {
+    async create(payload: Partial<Supplier>) {
       const supplier = await createSupplier(payload)
       this.items.push(supplier)
     },
-    async update(payload) {
+    async update(payload: Supplier) {
       const supplier = await updateSupplier(payload)
-      const index = this.items.findIndex(s => s.id === payload.id)
+      const index = this.items.findIndex((s) => s.id === payload.id)
       if (index !== -1) {
         this.items.splice(index, 1, supplier)
       }
       return supplier
     },
-    mapFromApi(apiSupplier) {
+    mapFromApi(apiSupplier: ApiSupplier) {
       return mapFromApi(apiSupplier)
     }
   }

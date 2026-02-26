@@ -2,18 +2,25 @@ import { defineStore } from 'pinia'
 import { loginRequest, logoutRequest } from '../services/authService'
 import { resetAllStores } from '@/shared/store/resetStores'
 
+interface AuthUser {
+  id?: number
+  name?: string
+  email?: string
+  type?: string
+}
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null,
-    token: null
+    user: null as AuthUser | null,
+    token: null as string | null
   }),
 
   getters: {
-    isAuthenticated: (state) => !!state.token
+    isAuthenticated: (state): boolean => !!state.token
   },
 
   actions: {
-    async login(email, password) {
+    async login(email: string, password: string) {
       const { data } = await loginRequest(email, password)
 
       this.token = data.token
@@ -26,7 +33,7 @@ export const useAuthStore = defineStore('auth', {
     async logout() {
       try {
         await logoutRequest()
-      } catch (e) {
+      } catch {
         // se falhar, seguimos limpando local
       }
 
@@ -48,4 +55,3 @@ export const useAuthStore = defineStore('auth', {
     }
   }
 })
-

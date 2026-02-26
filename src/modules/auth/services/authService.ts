@@ -1,10 +1,9 @@
 import http from '@/shared/services/http'
 
-export function loginRequest(email, password) {
+export function loginRequest(email: string, password: string) {
   return http.post('/login', { email, password })
 }
 
 export function logoutRequest() {
   return http.post('/logout')
 }
-

@@ -5,15 +5,26 @@ import {
   updateProduct,
   importCsv as importCsvApi,
   fetchProductsBySupplier as fetchBySupplierApi,
-  mapFromApi
+  mapFromApi,
+  type Product
 } from '../services/productsService'
+
+interface ApiProduct {
+  id: number
+  supplier_id: number
+  reference: string
+  name: string
+  color: string
+  price: number | string
+  status: boolean
+}
 
 export const useProductsStore = defineStore('products', {
   state: () => ({
-    items: [],
+    items: [] as Product[],
     loading: false,
     importing: false,
-    supplierId: null
+    supplierId: null as number | string | null
   }),
 
   actions: {
@@ -25,27 +36,27 @@ export const useProductsStore = defineStore('products', {
         this.loading = false
       }
     },
-    async create(payload) {
+    async create(payload: Partial<Product>) {
       const product = await createProduct(payload)
       this.items.push(product)
     },
-    async update(payload) {
+    async update(payload: Product) {
       const product = await updateProduct(payload)
-      const index = this.items.findIndex(p => p.id === payload.id)
+      const index = this.items.findIndex((p) => p.id === payload.id)
       if (index !== -1) {
         this.items.splice(index, 1, product)
       }
       return product
     },
-    async importCsv({ file, supplierId }) {
+    async importCsv(p: { file: File; supplierId: string | number }) {
       this.importing = true
       try {
-        return await importCsvApi({ file, supplierId })
+        return await importCsvApi(p)
       } finally {
         this.importing = false
       }
     },
-    async fetchBySupplier(supplierId) {
+    async fetchBySupplier(supplierId: number | string | null) {
       if (!supplierId) {
         this.items = []
         this.supplierId = null
@@ -66,7 +77,7 @@ export const useProductsStore = defineStore('products', {
       this.items = []
       this.supplierId = null
     },
-    mapFromApi(apiProduct) {
+    mapFromApi(apiProduct: ApiProduct) {
       return mapFromApi(apiProduct)
     }
   }

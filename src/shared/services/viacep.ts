@@ -1,13 +1,28 @@
 import axios from 'axios'
 
-export async function fetchAddressByCep(cep) {
+export interface ViaCepAddress {
+  street: string
+  district: string
+  city: string
+  state: string
+}
+
+interface ViaCepResponse {
+  logradouro: string
+  bairro: string
+  localidade: string
+  uf: string
+  erro?: boolean
+}
+
+export async function fetchAddressByCep(cep: string): Promise<ViaCepAddress | null> {
   const cleanCep = cep.replace(/\D/g, '')
 
   if (cleanCep.length !== 8) {
     return null
   }
 
-  const { data } = await axios.get(
+  const { data } = await axios.get<ViaCepResponse>(
     `https://viacep.com.br/ws/${cleanCep}/json/`
   )
 

@@ -3,12 +3,21 @@ import {
   fetchUsers,
   createUser,
   updateUser,
-  mapFromApi
+  mapFromApi,
+  type User
 } from '../services/usersService'
+
+interface ApiUser {
+  id: number
+  name: string
+  email: string
+  status: boolean
+  type: string
+}
 
 export const useUsersStore = defineStore('users', {
   state: () => ({
-    items: [],
+    items: [] as User[],
     loading: false
   }),
 
@@ -21,19 +30,19 @@ export const useUsersStore = defineStore('users', {
         this.loading = false
       }
     },
-    async create(payload) {
+    async create(payload: Partial<User> & { password: string }) {
       const user = await createUser(payload)
       this.items.push(user)
     },
-    async update(payload) {
+    async update(payload: User & { password?: string }) {
       const user = await updateUser(payload)
-      const index = this.items.findIndex(u => u.id === payload.id)
+      const index = this.items.findIndex((u) => u.id === payload.id)
       if (index !== -1) {
         this.items.splice(index, 1, user)
       }
       return user
     },
-    mapFromApi(apiUser) {
+    mapFromApi(apiUser: ApiUser) {
       return mapFromApi(apiUser)
     }
   }
