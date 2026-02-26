@@ -4,7 +4,7 @@ export const usersRoutes: RouteRecordRaw[] = [
   {
     path: '/users',
     name: 'users.index',
-    component: () => import('./pages/UsersIndexPage.vue'),
+    component: () => import('./views/UsersIndexPage.vue'),
     meta: {
       auth: true,
       layout: 'default',
@@ -15,7 +15,7 @@ export const usersRoutes: RouteRecordRaw[] = [
   {
     path: '/users/create',
     name: 'users.create',
-    component: () => import('./pages/UsersCreatePage.vue'),
+    component: () => import('./views/UsersCreatePage.vue'),
     meta: {
       auth: true,
       layout: 'default',
@@ -29,7 +29,7 @@ export const usersRoutes: RouteRecordRaw[] = [
   {
     path: '/users/:id/edit',
     name: 'users.edit',
-    component: () => import('./pages/UsersEditPage.vue'),
+    component: () => import('./views/UsersEditPage.vue'),
     meta: {
       auth: true,
       layout: 'default',

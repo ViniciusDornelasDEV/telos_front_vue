@@ -4,7 +4,7 @@ export const suppliersRoutes: RouteRecordRaw[] = [
   {
     path: '/suppliers',
     name: 'suppliers.index',
-    component: () => import('./pages/SuppliersIndexPage.vue'),
+    component: () => import('./views/SuppliersIndexPage.vue'),
     meta: {
       auth: true,
       layout: 'default',
@@ -15,7 +15,7 @@ export const suppliersRoutes: RouteRecordRaw[] = [
   {
     path: '/suppliers/create',
     name: 'suppliers.create',
-    component: () => import('./pages/SuppliersCreatePage.vue'),
+    component: () => import('./views/SuppliersCreatePage.vue'),
     meta: {
       auth: true,
       layout: 'default',
@@ -29,7 +29,7 @@ export const suppliersRoutes: RouteRecordRaw[] = [
   {
     path: '/suppliers/:id/edit',
     name: 'suppliers.edit',
-    component: () => import('./pages/SuppliersEditPage.vue'),
+    component: () => import('./views/SuppliersEditPage.vue'),
     meta: {
       auth: true,
       layout: 'default',

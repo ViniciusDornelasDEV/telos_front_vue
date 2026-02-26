@@ -4,7 +4,7 @@ export const productsRoutes: RouteRecordRaw[] = [
   {
     path: '/products',
     name: 'products.index',
-    component: () => import('./pages/ProductsIndexPage.vue'),
+    component: () => import('./views/ProductsIndexPage.vue'),
     meta: {
       auth: true,
       layout: 'default',
@@ -15,7 +15,7 @@ export const productsRoutes: RouteRecordRaw[] = [
   {
     path: '/products/create',
     name: 'products.create',
-    component: () => import('./pages/ProductsCreatePage.vue'),
+    component: () => import('./views/ProductsCreatePage.vue'),
     meta: {
       auth: true,
       layout: 'default',
@@ -29,7 +29,7 @@ export const productsRoutes: RouteRecordRaw[] = [
   {
     path: '/products/:id/edit',
     name: 'products.edit',
-    component: () => import('./pages/ProductsEditPage.vue'),
+    component: () => import('./views/ProductsEditPage.vue'),
     meta: {
       auth: true,
       layout: 'default',
@@ -43,7 +43,7 @@ export const productsRoutes: RouteRecordRaw[] = [
   {
     path: '/products/upload',
     name: 'products.upload',
-    component: () => import('./pages/ProductsUploadPage.vue'),
+    component: () => import('./views/ProductsUploadPage.vue'),
     meta: {
       auth: true,
       layout: 'default',
