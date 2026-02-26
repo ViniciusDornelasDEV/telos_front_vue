@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import http from '@/api/http'
-import { resetAllStores } from '@/stores/resetStores'
+import { loginRequest, logoutRequest } from '../services/authService'
+import { resetAllStores } from '@/shared/store/resetStores'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -14,10 +14,7 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     async login(email, password) {
-      const { data } = await http.post('/login', {
-        email,
-        password
-      })
+      const { data } = await loginRequest(email, password)
 
       this.token = data.token
       this.user = data.user
@@ -28,7 +25,7 @@ export const useAuthStore = defineStore('auth', {
 
     async logout() {
       try {
-        await http.post('/logout')
+        await logoutRequest()
       } catch (e) {
         // se falhar, seguimos limpando local
       }
@@ -51,3 +48,4 @@ export const useAuthStore = defineStore('auth', {
     }
   }
 })
+

@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useOrdersStore } from '@/stores/orders'
-import { useSuppliersStore } from '@/stores/suppliers'
-import { useProductsStore } from '@/stores/products'
+import { useOrdersStore } from '@/modules/orders/store/ordersStore'
+import { useSuppliersStore } from '@/modules/suppliers/store/suppliersStore'
+import { useProductsStore } from '@/modules/products/store/productsStore'
 import MoneyInput from '@/shared/components/MoneyInput.vue'
 
 const router = useRouter()

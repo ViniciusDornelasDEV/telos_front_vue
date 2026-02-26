@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref, onMounted } from 'vue'
-import { useSuppliersStore } from '@/stores/suppliers'
-import { useUsersStore } from '@/stores/users'
+import { useSuppliersStore } from '@/modules/suppliers/store/suppliersStore'
+import { useUsersStore } from '@/modules/users/store/usersStore'
 import { useRouter, useRoute } from 'vue-router'
 import { fetchAddressByCep } from '@/shared/services/viacep'
 import { validateCnpj } from '@/shared/utils/validateCnpj'
@@ -35,7 +35,7 @@ onMounted(async () => {
   if (usersStore.items.length === 0) {
     await usersStore.fetchUsers()
   }
-  sellersOptions.value = usersStore.items.filter(u => u.type === 'Vendedor')
+  sellersOptions.value = usersStore.items.filter(u => u.type === 'seller')
 })
 
 async function handleCepBlur() {

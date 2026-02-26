@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue'
-import { useUsersStore } from '@/stores/users'
+import { useUsersStore } from '@/modules/users/store/usersStore'
 import DataTable from '@/shared/components/DataTable.vue'
 import { Pencil, Trash2 } from 'lucide-vue-next'
 

@@ -1,13 +1,12 @@
 <script setup>
-import { onMounted } from 'vue'
-import { useOrdersStore } from '@/stores/orders'
-import { useDashboardStore } from '@/stores/dashboard'
+import { onMounted, computed } from 'vue'
+import { useOrdersStore } from '@/modules/orders/store/ordersStore'
+import { useDashboardSummary } from '@/shared/composables/useDashboardSummary'
 
 const ordersStore = useOrdersStore()
-const dashboard = useDashboardStore()
+const { summary } = useDashboardSummary(computed(() => ordersStore.items))
 
 onMounted(() => {
-  // o dashboard depende dos pedidos
   ordersStore.fetchOrders()
 })
 
@@ -25,28 +24,28 @@ function money(value) {
       <div class="stat bg-base-100 shadow rounded-box">
         <div class="stat-title">Total vendido (30 dias)</div>
         <div class="stat-value text-primary">
-          {{ money(dashboard.summary.totalSales) }}
+          {{ money(summary.totalSales) }}
         </div>
       </div>
 
       <div class="stat bg-base-100 shadow rounded-box">
         <div class="stat-title">Pedidos</div>
         <div class="stat-value">
-          {{ dashboard.summary.ordersCount }}
+          {{ summary.ordersCount }}
         </div>
       </div>
 
       <div class="stat bg-base-100 shadow rounded-box">
         <div class="stat-title">Ticket médio</div>
         <div class="stat-value">
-          {{ money(dashboard.summary.avgTicket) }}
+          {{ money(summary.avgTicket) }}
         </div>
       </div>
 
       <div class="stat bg-base-100 shadow rounded-box">
         <div class="stat-title">Produtos vendidos</div>
         <div class="stat-value">
-          {{ dashboard.summary.productsSold }}
+          {{ summary.productsSold }}
         </div>
       </div>
     </div>
@@ -58,7 +57,7 @@ function money(value) {
           <h2 class="card-title">Vendas por dia</h2>
 
           <ul class="space-y-2">
-            <li v-for="item in dashboard.summary.salesByDay" :key="item.date" class="flex justify-between">
+            <li v-for="item in summary.salesByDay" :key="item.date" class="flex justify-between">
               <span>{{ item.date }}</span>
               <span class="font-semibold">{{ money(item.total) }}</span>
             </li>
@@ -71,7 +70,7 @@ function money(value) {
           <h2 class="card-title">Vendas por fornecedor</h2>
 
           <ul class="space-y-2">
-            <li v-for="item in dashboard.summary.salesBySupplier" :key="item.name" class="flex justify-between">
+            <li v-for="item in summary.salesBySupplier" :key="item.name" class="flex justify-between">
               <span>{{ item.name }}</span>
               <span class="font-semibold">{{ money(item.total) }}</span>
             </li>
@@ -95,7 +94,7 @@ function money(value) {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="order in dashboard.summary.lastOrders" :key="order.id">
+            <tr v-for="order in summary.lastOrders" :key="order.id">
               <td>#{{ order.id }}</td>
               <td>{{ order.supplier }}</td>
               <td>{{ money(order.total) }}</td>

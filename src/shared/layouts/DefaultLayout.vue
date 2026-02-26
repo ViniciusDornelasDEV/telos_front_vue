@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '@/modules/auth/store/authStore'
 import { useRouter } from 'vue-router'
 import { usePage } from '@/shared/composables/usePage'
 

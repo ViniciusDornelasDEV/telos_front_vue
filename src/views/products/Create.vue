@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref, onMounted, computed } from 'vue'
-import { useProductsStore } from '@/stores/products'
-import { useSuppliersStore } from '@/stores/suppliers'
+import { useProductsStore } from '@/modules/products/store/productsStore'
+import { useSuppliersStore } from '@/modules/suppliers/store/suppliersStore'
 import { useRouter } from 'vue-router'
 import MoneyInput from '@/shared/components/MoneyInput.vue'
 

@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useSuppliersStore } from '@/stores/suppliers'
-import { useProductsStore } from '@/stores/products'
+import { useSuppliersStore } from '@/modules/suppliers/store/suppliersStore'
+import { useProductsStore } from '@/modules/products/store/productsStore'
 
 const router = useRouter()
 const suppliersStore = useSuppliersStore()

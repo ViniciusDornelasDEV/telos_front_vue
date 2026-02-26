@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue'
-import { useSuppliersStore } from '@/stores/suppliers'
+import { useSuppliersStore } from '@/modules/suppliers/store/suppliersStore'
 import { useRouter } from 'vue-router'
 import { fetchAddressByCep } from '@/shared/services/viacep'
 import { validateCnpj } from '@/shared/utils/validateCnpj'

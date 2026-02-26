@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted } from 'vue'
-import { useProductsStore } from '@/stores/products'
-import { useSuppliersStore } from '@/stores/suppliers'
+import { useProductsStore } from '@/modules/products/store/productsStore'
+import { useSuppliersStore } from '@/modules/suppliers/store/suppliersStore'
 import DataTable from '@/shared/components/DataTable.vue'
 import { Pencil, Trash2 } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
