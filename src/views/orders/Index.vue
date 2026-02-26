@@ -2,7 +2,7 @@
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useOrdersStore } from '@/stores/orders'
-import DataTable from '@/components/DataTable.vue'
+import DataTable from '@/shared/components/DataTable.vue'
 import { Pencil, Trash2 } from 'lucide-vue-next'
 
 const router = useRouter()

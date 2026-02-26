@@ -3,7 +3,7 @@ import { reactive, ref, onMounted, computed } from 'vue'
 import { useProductsStore } from '@/stores/products'
 import { useSuppliersStore } from '@/stores/suppliers'
 import { useRouter } from 'vue-router'
-import MoneyInput from '@/components/MoneyInput.vue'
+import MoneyInput from '@/shared/components/MoneyInput.vue'
 
 const router = useRouter()
 const productsStore = useProductsStore()

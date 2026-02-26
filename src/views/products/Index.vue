@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 import { useProductsStore } from '@/stores/products'
 import { useSuppliersStore } from '@/stores/suppliers'
-import DataTable from '@/components/DataTable.vue'
+import DataTable from '@/shared/components/DataTable.vue'
 import { Pencil, Trash2 } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 

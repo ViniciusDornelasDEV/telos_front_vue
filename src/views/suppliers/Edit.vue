@@ -3,8 +3,8 @@ import { reactive, ref, onMounted } from 'vue'
 import { useSuppliersStore } from '@/stores/suppliers'
 import { useUsersStore } from '@/stores/users'
 import { useRouter, useRoute } from 'vue-router'
-import { fetchAddressByCep } from '@/services/viacep'
-import { validateCnpj } from '@/utils/validateCnpj'
+import { fetchAddressByCep } from '@/shared/services/viacep'
+import { validateCnpj } from '@/shared/utils/validateCnpj'
 
 const route = useRoute()
 const router = useRouter()

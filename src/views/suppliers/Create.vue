@@ -2,8 +2,8 @@
 import { reactive, ref } from 'vue'
 import { useSuppliersStore } from '@/stores/suppliers'
 import { useRouter } from 'vue-router'
-import { fetchAddressByCep } from '@/services/viacep'
-import { validateCnpj } from '@/utils/validateCnpj'
+import { fetchAddressByCep } from '@/shared/services/viacep'
+import { validateCnpj } from '@/shared/utils/validateCnpj'
 
 
 const router = useRouter()

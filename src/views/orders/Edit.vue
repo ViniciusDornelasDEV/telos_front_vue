@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useOrdersStore } from '@/stores/orders'
 import { useSuppliersStore } from '@/stores/suppliers'
 import { useProductsStore } from '@/stores/products'
-import MoneyInput from '@/components/MoneyInput.vue'
+import MoneyInput from '@/shared/components/MoneyInput.vue'
 
 const route = useRoute()
 const router = useRouter()

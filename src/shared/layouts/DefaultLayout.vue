@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
-import { usePage } from '@/composables/usePage'
+import { usePage } from '@/shared/composables/usePage'
 
 const auth = useAuthStore()
 const router = useRouter()
