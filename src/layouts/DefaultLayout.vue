@@ -49,8 +49,8 @@ function logout() {
         </div>
 
         <!-- Actions -->
-        <button class="btn btn-sm btn-outline" @click="logout">
-          Logout
+        <button class="btn btn-sm btn-outline" @click="logout" aria-label="Sign out">
+          Sign Out
         </button>
       </header>
 
