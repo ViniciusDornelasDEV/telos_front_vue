@@ -30,14 +30,13 @@ onMounted(async () => {
     if (product) Object.assign(form, product)
 })
 
-function submit() {
-    if (!form.supplierId || !form.reference || !form.name || !form.price) {
-        alert('Preencha todos os campos obrigatórios')
-        return
-    }
+async function submit() {
+    try {
+        await productsStore.update(form)
+        router.push('/products')
+    } catch {
 
-    productsStore.update(form)
-    router.push('/products')
+    }
 }
 </script>
 

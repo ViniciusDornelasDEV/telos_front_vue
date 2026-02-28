@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import { useAuthStore } from '@/modules/auth/store/authStore'
 import DefaultLayout from '@/shared/layouts/DefaultLayout.vue'
+import ToastContainer from '@/shared/components/ToastContainer.vue'
 
 const auth = useAuthStore()
 
@@ -16,4 +17,6 @@ onMounted(() => {
   </DefaultLayout>
 
   <router-view v-else />
+
+  <ToastContainer />
 </template>

@@ -22,9 +22,13 @@ onMounted(() => {
   if (user) Object.assign(form, user)
 })
 
-function submit() {
-  usersStore.update(form)
-  router.push('/users')
+async function submit() {
+  try {
+    await usersStore.update(form)
+    router.push('/users')
+  } catch {
+
+  }
 }
 </script>
 

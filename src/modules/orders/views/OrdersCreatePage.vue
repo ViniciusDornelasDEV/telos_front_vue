@@ -55,15 +55,18 @@ function removeItem(index) {
 }
 
 async function submit() {
-    await ordersStore.create({
-        supplierId: supplierId.value,
-        date: date.value,
-        observation: observation.value,
-        products: items.value
-    })
+    try {
+        await ordersStore.create({
+            supplierId: supplierId.value,
+            date: date.value,
+            observation: observation.value,
+            products: items.value
+        })
+        productsStore.clear()
+        router.push('/orders')
+    } catch {
 
-    productsStore.clear()
-    router.push('/orders')
+    }
 }
 </script>
 <template>

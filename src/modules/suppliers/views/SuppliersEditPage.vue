@@ -80,12 +80,16 @@ async function submit() {
     return
   }
   cnpjError.value = ''
-  const updatedSupplier = await suppliersStore.update({
-    ...form,
-    sellers: [...form.sellers]
-  })
-  Object.assign(form, updatedSupplier)
-  router.push('/suppliers')
+  try {
+    const updatedSupplier = await suppliersStore.update({
+      ...form,
+      sellers: [...form.sellers]
+    })
+    Object.assign(form, updatedSupplier)
+    router.push('/suppliers')
+  } catch {
+
+  }
 }
 
 </script>

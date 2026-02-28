@@ -14,9 +14,13 @@ const form = reactive({
     type: 'vendedor'
 })
 
-function submit() {
-    usersStore.create(form)
-    router.push('/users')
+async function submit() {
+    try {
+        await usersStore.create(form)
+        router.push('/users')
+    } catch {
+
+    }
 }
 </script>
 

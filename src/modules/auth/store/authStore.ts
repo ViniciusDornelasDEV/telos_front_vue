@@ -49,8 +49,13 @@ export const useAuthStore = defineStore('auth', {
       const user = localStorage.getItem('user')
 
       if (token && user) {
-        this.token = token
-        this.user = JSON.parse(user)
+        try {
+          this.token = token
+          this.user = JSON.parse(user)
+        } catch {
+          localStorage.removeItem('token')
+          localStorage.removeItem('user')
+        }
       }
     }
   }

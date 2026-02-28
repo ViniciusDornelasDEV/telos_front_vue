@@ -90,20 +90,23 @@ function removeItem(index) {
 async function submit() {
     if (isReadOnly.value) return
 
-    await ordersStore.update({
-        id: Number(orderId),
-        date: date.value,
-        status: status.value,
-        observation: observation.value,
-        products: items.value.map(i => ({
-            id: i.productId,
-            unitPrice: i.unitPrice,
-            quantity: i.quantity
-        }))
-    })
+    try {
+        await ordersStore.update({
+            id: Number(orderId),
+            date: date.value,
+            status: status.value,
+            observation: observation.value,
+            products: items.value.map(i => ({
+                id: i.productId,
+                unitPrice: i.unitPrice,
+                quantity: i.quantity
+            }))
+        })
+        productsStore.clear()
+        router.push('/orders')
+    } catch {
 
-    productsStore.clear()
-    router.push('/orders')
+    }
 }
 </script>
 <template>

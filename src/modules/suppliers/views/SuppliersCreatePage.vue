@@ -41,14 +41,18 @@ function handleCnpjBlur() {
   }
 }
 
-function submit() {
+async function submit() {
   if (!validateCnpj(form.cnpj)) {
     cnpjError.value = 'CNPJ inválido'
     return
   }
   cnpjError.value = ''
-  suppliersStore.create(form)
-  router.push('/suppliers')
+  try {
+    await suppliersStore.create(form)
+    router.push('/suppliers')
+  } catch {
+
+  }
 }
 
 </script>

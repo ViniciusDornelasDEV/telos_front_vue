@@ -24,9 +24,13 @@ onMounted(async () => {
     await suppliersStore.fetchSuppliers()
 })
 
-function submit() {
-    productsStore.create(form)
-    router.push('/products')
+async function submit() {
+    try {
+        await productsStore.create(form)
+        router.push('/products')
+    } catch {
+
+    }
 }
 </script>
 
